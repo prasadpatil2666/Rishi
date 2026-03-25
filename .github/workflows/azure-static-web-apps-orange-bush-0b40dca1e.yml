@@ -19,6 +19,13 @@ jobs:
         with:
           submodules: true
           lfs: false
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+      - name: Publish Blazor app
+        run: |
+          dotnet publish ./StayFocus/StayFocus.csproj -c Release -o ./StayFocus/publish
       - name: Build And Deploy
         id: builddeploy
         uses: Azure/static-web-apps-deploy@v1
@@ -27,10 +34,10 @@ jobs:
           repo_token: ${{ secrets.GITHUB_TOKEN }} # Used for Github integrations (i.e. PR comments)
           action: "upload"
           ###### Repository/Build Configurations - These values can be configured to match your app requirements. ######
-          # For more information regarding Static Web App workflow configurations, please visit: https://aka.ms/swaworkflowconfig
-          app_location: "./StayFocus" # App source code path
+          # For Blazor WebAssembly publish we upload the published wwwroot folder
+          app_location: "./StayFocus/publish/wwwroot" # Published app content
           api_location: "Api" # Api source code path - optional
-          output_location: "wwwroot" # Built app content directory - optional
+          output_location: "" # not used when uploading a prebuilt artifact
           ###### End of Repository/Build Configurations ######
 
   close_pull_request_job:
