@@ -1,0 +1,240 @@
+﻿@page "/"
+@inject IJSRuntime JS
+
+<!-- NAV -->
+<nav>
+    <a href="#" class="logo">View<span>dly</span></a>
+    <div class="nav-links">
+        <a href="#how">How it works</a>
+        <a href="#features">Features</a>
+        <a href="#waitlist" class="nav-cta">Join waitlist</a>
+    </div>
+</nav>
+
+<main style="padding-top:72px"> <!-- ensure fixed nav doesn't overlap -->
+
+<!-- HERO -->
+<section class="hero">
+    <div class="hero-badge">
+        <div class="badge-dot"></div>
+        Building in public — join 500+ on the waitlist
+    </div>
+    <h1>Reviews you can<br><em>actually trust.</em></h1>
+    <p class="hero-sub">
+        Viewdly is the first review platform where every badge is earned — not bought.
+        Verified receipts. Video proof. Real resolutions. No fake stars.
+    </p>
+    <div class="hero-actions">
+        <a href="#waitlist" class="btn-primary">Get early access</a>
+        <a href="#how" class="btn-ghost">See how it works</a>
+    </div>
+    <div class="hero-trust">
+        <div>Why people are switching</div>
+        <div class="trust-pills">
+            <div class="trust-pill">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 12l2 2 4-4"/><path d="M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0z"/></svg>
+                Verified purchase badges
+            </div>
+            <div class="trust-pill">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 10l4.553-2.069A1 1 0 0 1 21 8.868V15.132a1 1 0 0 1-1.447.937L15 14M3 8h12v8H3z"/></svg>
+                Video-first reviews
+            </div>
+            <div class="trust-pill">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                Brand Resolution Score
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- PROBLEM -->
+<section class="problem" id="problem">
+    <div class="section-label reveal">The problem</div>
+    <div class="problem-grid">
+        <h2 class="reveal">The review system is<br>completely broken.</h2>
+        <div class="problem-body reveal">
+            <div class="stat-row">
+                <div class="stat">
+                    <div class="stat-num">42%</div>
+                    <div class="stat-desc">of online reviews are estimated to be fake or incentivised</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-num">$152B</div>
+                    <div class="stat-desc">lost annually by consumers who bought based on false reviews</div>
+                </div>
+            </div>
+            <p>Amazon, Google, and Yelp have known about this for years. Their solution? Algorithms that catch some fakes, miss most, and give brands no path to redemption. Meanwhile, ChatGPT makes writing a convincing 5-star review a 10-second task.</p>
+            <p style="margin-top:1rem">Viewdly is built on a different principle: <strong>a review is only as trustworthy as the evidence behind it.</strong></p>
+        </div>
+    </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- HOW IT WORKS -->
+<section class="how" id="how">
+    <div class="how-inner">
+        <div class="section-label">How it works</div>
+        <h2 class="reveal">Trust is earned in three steps.</h2>
+        <div class="steps">
+            <div class="step reveal">
+                <div class="step-num">01</div>
+                <div class="step-badge">Verified owner</div>
+                <h3>Prove you own it</h3>
+                <p>Connect your email or upload your receipt. Our system confirms you actually bought the product before your review carries full weight. No receipt, no "Certified Owner" badge.</p>
+            </div>
+            <div class="step reveal">
+                <div class="step-num">02</div>
+                <div class="step-badge">Video proof</div>
+                <h3>Show, don't just tell</h3>
+                <p>Upload a 15–30 second "Quick Look" video of the product in your hands. A real unboxing is worth a thousand written words — and infinitely harder to fake.</p>
+            </div>
+            <div class="step reveal">
+                <div class="step-num">03</div>
+                <div class="step-badge">Resolution score</div>
+                <h3>Brands must respond</h3>
+                <p>If something breaks, post it. Brands earn a public Resolution Score every time they fix a problem. You don't just see the complaint — you see what happened after.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- FEATURES -->
+<section class="features" id="features">
+    <div class="features-header">
+        <div>
+            <div class="section-label reveal">Features</div>
+            <h2 class="reveal">Built for people who are tired of being lied to.</h2>
+        </div>
+        <p class="reveal">Every feature on Viewdly exists to answer one question: "Can I trust this review?" Not "Can I write a lot of them?"</p>
+    </div>
+    <div class="feat-grid">
+        <div class="feat reveal">
+            <span class="feat-tag">Day 1</span>
+            <div class="feat-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+            </div>
+            <h3>Verified Receipt System</h3>
+            <p>Connect your email (read-only) or upload a photo of your store receipt. Certified Owner reviews are weighted 10× higher in search and rankings — making authenticity the default, not the exception.</p>
+        </div>
+        <div class="feat reveal">
+            <span class="feat-tag">Day 1</span>
+            <div class="feat-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 10l4.553-2.069A1 1 0 0121 8.868V15.132a1 1 0 01-1.447.937L15 14M3 8h12v8H3z"/></svg>
+            </div>
+            <h3>Video-First Reviews</h3>
+            <p>Short-form video clips that put the product in your hands. Users can filter product listings by "has video" — and video reviews rank higher in discovery. Faking a video of a physical product is nearly impossible.</p>
+        </div>
+        <div class="feat reveal">
+            <span class="feat-tag">Month 4</span>
+            <div class="feat-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+            </div>
+            <h3>Resolution Score</h3>
+            <p>Brands earn points every time they respond to and resolve a complaint. A brand's Resolution Score is public and permanent. A 1-star review with a resolved badge tells a better story than five fake 5-stars.</p>
+        </div>
+        <div class="feat reveal">
+            <span class="feat-tag">Month 4</span>
+            <div class="feat-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+            </div>
+            <h3>Product Tribes</h3>
+            <p>Join communities like "Sustainable Kitchen" or "Budget Gaming" and see reviews only from people who share your lifestyle. A review from someone who buys like you is worth more than a review from anyone.</p>
+        </div>
+    </div>
+</section>
+
+<!-- MOCKUP -->
+<section class="mockup-section">
+    <div class="mockup-inner">
+        <div class="section-label reveal">What a real review looks like</div>
+        <h2 class="reveal">Every detail earns or loses your trust — on purpose.</h2>
+        <div class="review-card reveal">
+            <div class="review-top">
+                <div class="avatar">PR</div>
+                <div>
+                    <div class="reviewer-name">Priya R.</div>
+                    <div class="reviewer-sub">
+                        <span class="badge-certified">
+                            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="10"/></svg>
+                            Certified Owner
+                        </span>
+                        &nbsp;· 14 reviews
+                    </div>
+                </div>
+            </div>
+            <div class="stars">
+                <svg class="star" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                <svg class="star" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                <svg class="star" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                <svg class="star" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                <svg class="star" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+            </div>
+            <p class="review-text">The bamboo lid cracked after the second wash. I was really disappointed — it looks beautiful but that's a quality issue that should be caught. Attaching video of the crack below.</p>
+            <div class="brand-reply">
+                <div class="brand-reply-label">Brand response — EcoNest</div>
+                <p>Hi Priya — we're so sorry about this. We've sent a replacement with our updated 2024 bamboo lid to your delivery address. We've also flagged this to our supplier. Thank you for the video evidence.</p>
+                <div class="resolution-badge">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="10"/></svg>
+                    Resolved — replacement shipped
+                </div>
+            </div>
+            <div class="review-meta">
+                <span>Bamboo Lunch Box Set · Oct 2024</span>
+                <span>43 people found this helpful</span>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- WAITLIST -->
+<section class="waitlist" id="waitlist">
+    <div class="waitlist-inner">
+        <h2>Be first when<br>trust arrives.</h2>
+        <p>Viewdly is in private beta. Join the waitlist and get early access, plus a founding member badge on your profile — forever.</p>
+        <div class="email-form">
+            <input type="email" class="email-input" placeholder="your@email.com" @bind="EmailInput" id="email-input">
+            <button class="email-btn" @onclick="JoinWaitlist">Join waitlist</button>
+        </div>
+        <p class="waitlist-note" id="waitlist-msg" style="color: @WaitlistMessageColor">@WaitlistMessage</p>
+    </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+    <a href="#" class="footer-logo">View<span>dly</span></a>
+    <p>Reviews you can actually trust. &copy; 2025 Viewdly</p>
+    <p style="font-size:.78rem;color:#999">viewdly.com</p>
+</footer>
+
+</main>
+
+@code {
+    private string EmailInput = "";
+    private string WaitlistMessage = "No spam. Just one email when we open the doors.";
+    private string WaitlistMessageColor = "rgba(245,240,232,.25)";
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await JS.InvokeVoidAsync("initializeRevealAnimation");
+        }
+    }
+
+    private void JoinWaitlist()
+    {
+        if (string.IsNullOrWhiteSpace(EmailInput) || !EmailInput.Contains("@"))
+        {
+            WaitlistMessage = "Please enter a valid email address.";
+            WaitlistMessageColor = "#c8973a";
+            return;
+        }
+
+        WaitlistMessage = "You're on the list! We'll be in touch soon.";
+        WaitlistMessageColor = "rgba(200,151,58,.9)";
+        EmailInput = "";
+    }
+}
