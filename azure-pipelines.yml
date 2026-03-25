@@ -1,0 +1,48 @@
+# Azure DevOps pipeline for building and deploying a Blazor WebAssembly app to Azure Static Web Apps
+# Edit the variables below to match your repo layout before saving.
+
+trigger:
+  - master
+  - main
+
+variables:
+  buildConfiguration: 'Release'
+  dotnetVersion: '10.0.x'
+  # App location: change to the folder that contains your Blazor client project (use '/' if it's the repo root)
+  app_location: '/'
+  # Api location: set to 'api' if you have Azure Functions, otherwise leave empty
+  api_location: ''
+  # Output location: path (relative to the publish folder) that contains the static site (wwwroot)
+  output_location: 'publish/wwwroot'
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+steps:
+  - task: UseDotNet@2
+    displayName: 'Use .NET SDK'
+    inputs:
+      packageType: 'sdk'
+      version: '$(dotnetVersion)'
+
+  - script: dotnet restore
+    displayName: 'Restore NuGet packages'
+
+  - script: |
+      dotnet publish -c $(buildConfiguration) -o $(Build.ArtifactStagingDirectory)/publish
+    displayName: 'Build and publish Blazor WebAssembly'
+
+  # Deploy to Azure Static Web Apps. Provide a pipeline variable or secret named 'deployment_token'
+  - task: AzureStaticWebApp@0
+    displayName: 'Deploy to Azure Static Web Apps'
+    inputs:
+      app_location: '$(app_location)'
+      api_location: '$(api_location)'
+      output_location: '$(Build.ArtifactStagingDirectory)/$(output_location)'
+      azure_static_web_apps_api_token: '$(deployment_token)'
+
+# Notes:
+# - Add a pipeline variable or secret named 'deployment_token' containing the Static Web App deployment token.
+# - If your Blazor client project isn't at the repo root, set 'app_location' to the relative folder (for example 'src/Client').
+# - If you have an API (Azure Functions), set 'api_location' to that folder (for example 'api').
+# - The pipeline uses 'dotnet publish' output; adjust 'output_location' if your publish path differs.
