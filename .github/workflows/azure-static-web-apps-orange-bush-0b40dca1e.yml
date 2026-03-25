@@ -19,28 +19,6 @@ jobs:
         with:
           submodules: true
           lfs: false
-      - name: Setup .NET
-        uses: actions/setup-dotnet@v4
-        with:
-          dotnet-version: '10.0.x'
-      - name: Publish Blazor app
-        run: |
-          dotnet publish ./StayFocus/StayFocus.csproj -c Release -o ./StayFocus/publish
-      - name: Ensure non-hashed blazor.webassembly.js
-        run: |
-          set -e
-          cd StayFocus/publish/wwwroot/_framework || exit 0
-          # copy first matching blazor.webassembly.*.js to blazor.webassembly.js if non-hashed file missing
-          if [ ! -f blazor.webassembly.js ]; then
-            f=$(ls blazor.webassembly.*.js 2>/dev/null | head -n 1 || true)
-            if [ -n "$f" ]; then
-              cp "$f" blazor.webassembly.js
-            fi
-          fi
-      - name: Diagnostic: list published wwwroot
-        run: |
-          echo "Listing StayFocus/publish/wwwroot"
-          ls -laR ./StayFocus/publish/wwwroot || true
       - name: Build And Deploy
         id: builddeploy
         uses: Azure/static-web-apps-deploy@v1
@@ -49,10 +27,12 @@ jobs:
           repo_token: ${{ secrets.GITHUB_TOKEN }} # Used for Github integrations (i.e. PR comments)
           action: "upload"
           ###### Repository/Build Configurations - These values can be configured to match your app requirements. ######
-          # Upload the published wwwroot folder
-          app_location: "./StayFocus/publish/wwwroot" # Published app content
+          # Let Oryx build the Blazor app (default behavior). Set app_location to the project folder
+          app_location: "./StayFocus" # App source code path
           api_location: "Api" # Api source code path - optional
-          output_location: "" # not used when uploading a prebuilt artifact
+          output_location: "wwwroot" # Built app content directory - optional
+          # If the deployment token is missing, do not fail the workflow (useful for debugging)
+          skip_deploy_on_missing_secrets: true
           ###### End of Repository/Build Configurations ######
 
   close_pull_request_job:
