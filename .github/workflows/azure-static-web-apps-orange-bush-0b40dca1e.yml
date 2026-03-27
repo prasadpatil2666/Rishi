@@ -29,7 +29,7 @@ jobs:
           action: "upload"
           app_location: "./StayFocus" # Path to folder with .csproj
           api_location: "Api"         # Optional: Path to your Functions API
-          output_location: "wwwroot"  # Correct for Blazor WASM
+          output_location: ""  # Correct for Blazor WASM
         env: # Moved here for better compatibility
           SKIP_DEPLOY_ON_MISSING_SECRETS: true
 
