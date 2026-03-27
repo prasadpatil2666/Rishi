@@ -1,15 +1,21 @@
 <Project Sdk="Microsoft.NET.Sdk.BlazorWebAssembly">
 
-  <PropertyGroup>
-    <TargetFramework>net10.0</TargetFramework>
-    <Nullable>enable</Nullable>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <OverrideHtmlAssetPlaceholders>true</OverrideHtmlAssetPlaceholders>
-	  <WasmFingerprintAssets>false</WasmFingerprintAssets>
-	  <BlazorCacheBootResources>false</BlazorCacheBootResources>
-	  <StaticWebAssetFingerprintingEnabled>false</StaticWebAssetFingerprintingEnabled>
+	<PropertyGroup>
+		<TargetFramework>net10.0</TargetFramework>
+		<Nullable>enable</Nullable>
+		<ImplicitUsings>enable</ImplicitUsings>
 
-  </PropertyGroup>
+		<!-- FIXES START HERE -->
+		<WasmFingerprintAssets>false</WasmFingerprintAssets>
+		<StaticWebAssetFingerprintingEnabled>false</StaticWebAssetFingerprintingEnabled>
+		<BlazorCacheBootResources>false</BlazorCacheBootResources>
+
+		<!-- Set this to false for .NET 10 to prevent the new asset manager from renaming files -->
+		<OverrideHtmlAssetPlaceholders>false</OverrideHtmlAssetPlaceholders>
+
+		<!-- Disable compression during build to prevent mismatching file extensions -->
+		<BlazorEnableCompression>false</BlazorEnableCompression>
+	</PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="10.0.2" />
