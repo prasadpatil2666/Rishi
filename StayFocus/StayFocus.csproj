@@ -5,6 +5,10 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <OverrideHtmlAssetPlaceholders>true</OverrideHtmlAssetPlaceholders>
+	  <WasmFingerprintAssets>false</WasmFingerprintAssets>
+	  <BlazorCacheBootResources>false</BlazorCacheBootResources>
+	  <StaticWebAssetFingerprintingEnabled>false</StaticWebAssetFingerprintingEnabled>
+
   </PropertyGroup>
 
   <ItemGroup>
