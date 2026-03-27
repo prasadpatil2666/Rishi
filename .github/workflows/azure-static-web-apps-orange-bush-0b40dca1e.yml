@@ -38,7 +38,7 @@ jobs:
           action: "upload"
           
           # Point directly to the output of the publish command
-          app_location: "release/wwwroot" 
+          app_location: "publish_output/wwwroot" 
           api_location: "Api"
           output_location: "" # Leave empty because we are already pointing to the folder
           

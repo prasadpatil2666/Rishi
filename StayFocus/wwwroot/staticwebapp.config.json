@@ -1,11 +1,13 @@
 {
   "navigationFallback": {
-    "rewrite": "/index.html"
+    "rewrite": "/index.html",
+    "exclude": [ "/_framework/*", "/css/*", "/js/*" ]
   },
   "mimeTypes": {
     ".wasm": "application/wasm",
     ".dll": "application/octet-stream",
     ".pdb": "application/octet-stream",
-    ".json": "application/json"
+    ".json": "application/json",
+    ".js": "application/javascript"
   }
 }
