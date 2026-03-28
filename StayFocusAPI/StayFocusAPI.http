@@ -1,0 +1,6 @@
+@StayFocusAPI_HostAddress = http://localhost:5125
+
+GET {{StayFocusAPI_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

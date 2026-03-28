@@ -1,0 +1,160 @@
+@page "/reviews-api"
+@using StayFocus.Services
+@inject ReviewApiClient ReviewApi
+@inject IConfiguration Configuration
+
+<div style="padding: 2rem; max-width: 900px; margin: 0 auto;">
+    <h1>Reviews from API</h1>
+    <p style="color: #6b6560; margin-bottom: 1.5rem;">
+        This page demonstrates calling the REST API with Swagger/OpenAPI documentation.
+    </p>
+
+    <!-- API Base URL Info -->
+    <div style="background: #ede7d9; padding: 1rem; border-radius: 8px; margin-bottom: 2rem;">
+        <strong>API Endpoints:</strong>
+        <ul style="margin-top: 0.5rem; padding-left: 1.5rem;">
+            <li><code>GET /api/reviews</code> - Get all reviews</li>
+            <li><code>GET /api/reviews/{id}</code> - Get a specific review</li>
+            <li><code>POST /api/reviews</code> - Create a new review</li>
+        </ul>
+        <p style="margin-top: 0.5rem; font-size: 0.9rem;">
+            <strong>Swagger UI:</strong> <a href="http://localhost:5000/swagger" target="_blank">http://localhost:5000/swagger</a>
+        </p>
+    </div>
+
+    <!-- Load Button -->
+    <button @onclick="LoadReviews" 
+            style="padding: 0.75rem 1.5rem; background: #0e0e0e; color: #f5f0e8; border: none; border-radius: 100px; cursor: pointer; font-weight: 500;">
+        Load Reviews from API
+    </button>
+
+    <!-- Loading State -->
+    @if (isLoading)
+    {
+        <p style="margin-top: 1rem; color: #6b6560;">Loading reviews...</p>
+    }
+
+    <!-- Error State -->
+    @if (!string.IsNullOrEmpty(error))
+    {
+        <div style="background: #f5e8e8; border: 1px solid #d9b3b3; padding: 1rem; border-radius: 8px; margin-top: 1rem; color: #8b0000;">
+            <strong>Error:</strong> @error
+        </div>
+    }
+
+    <!-- Reviews List -->
+    @if (reviews != null && reviews.Count > 0)
+    {
+        <div style="margin-top: 2rem;">
+            <h2>Retrieved Reviews (@reviews.Count)</h2>
+            @foreach (var review in reviews)
+            {
+                <div style="border: 0.5px solid #d0cac0; border-radius: 8px; padding: 1.5rem; margin-bottom: 1rem; background: #faf8f4;">
+                    <div style="display: flex; justify-content: space-between; align-items: start; gap: 1rem;">
+                        <div>
+                            <h3 style="margin: 0 0 0.5rem 0;">@review.Company</h3>
+                            <p style="margin: 0 0 0.5rem 0; color: #6b6560;"><strong>@review.Title</strong></p>
+                            <p style="margin: 0; color: #6b6560;">@review.Content</p>
+                        </div>
+                        <div style="text-align: right;">
+                            <div style="font-size: 1.5rem; font-weight: 900; color: #c8973a;">
+                                @review.Rating.ToString("F1")
+                            </div>
+                            <div style="font-size: 0.8rem; color: #6b6560;">out of 5</div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+
+    <!-- Create Review Form -->
+    <div style="margin-top: 3rem; border: 0.5px solid #d0cac0; padding: 2rem; border-radius: 8px; background: #faf8f4;">
+        <h2>Create New Review</h2>
+        <div style="margin-bottom: 1rem;">
+            <label style="display: block; margin-bottom: 0.5rem; font-weight: 500;">Company</label>
+            <input @bind="newReview.Company" 
+                   type="text" 
+                   placeholder="e.g., Amazon, Apple" 
+                   style="width: 100%; padding: 0.75rem; border: 0.5px solid #d0cac0; border-radius: 4px; font-family: inherit;" />
+        </div>
+        <div style="margin-bottom: 1rem;">
+            <label style="display: block; margin-bottom: 0.5rem; font-weight: 500;">Title</label>
+            <input @bind="newReview.Title" 
+                   type="text" 
+                   placeholder="e.g., Great service" 
+                   style="width: 100%; padding: 0.75rem; border: 0.5px solid #d0cac0; border-radius: 4px; font-family: inherit;" />
+        </div>
+        <div style="margin-bottom: 1rem;">
+            <label style="display: block; margin-bottom: 0.5rem; font-weight: 500;">Review Content</label>
+            <textarea @bind="newReview.Content" 
+                      placeholder="Share your experience..." 
+                      style="width: 100%; padding: 0.75rem; border: 0.5px solid #d0cac0; border-radius: 4px; font-family: inherit; min-height: 100px;"></textarea>
+        </div>
+        <div style="margin-bottom: 1rem;">
+            <label style="display: block; margin-bottom: 0.5rem; font-weight: 500;">Rating (0-5)</label>
+            <input @bind="newReview.Rating" 
+                   type="number" 
+                   min="0" 
+                   max="5" 
+                   step="0.1" 
+                   style="width: 100%; padding: 0.75rem; border: 0.5px solid #d0cac0; border-radius: 4px; font-family: inherit;" />
+        </div>
+        <button @onclick="SubmitReview" 
+                style="padding: 0.75rem 1.5rem; background: #1a4a3a; color: #f5f0e8; border: none; border-radius: 100px; cursor: pointer; font-weight: 500;">
+            Submit Review
+        </button>
+    </div>
+</div>
+
+@code {
+    private List<ReviewDto>? reviews;
+    private ReviewDto newReview = new();
+    private bool isLoading = false;
+    private string? error;
+
+    private async Task LoadReviews()
+    {
+        isLoading = true;
+        error = null;
+        try
+        {
+            reviews = await ReviewApi.GetReviewsAsync();
+            if (reviews == null)
+            {
+                error = "Failed to load reviews. Make sure the API is running at http://localhost:5000";
+            }
+        }
+        catch (Exception ex)
+        {
+            error = ex.Message;
+        }
+        finally
+        {
+            isLoading = false;
+        }
+    }
+
+    private async Task SubmitReview()
+    {
+        if (string.IsNullOrWhiteSpace(newReview.Company) || string.IsNullOrWhiteSpace(newReview.Title))
+        {
+            error = "Company and Title are required";
+            return;
+        }
+
+        error = null;
+        var created = await ReviewApi.CreateReviewAsync(newReview);
+
+        if (created != null)
+        {
+            reviews?.Add(created);
+            newReview = new();
+            error = null;
+        }
+        else
+        {
+            error = "Failed to create review";
+        }
+    }
+}
