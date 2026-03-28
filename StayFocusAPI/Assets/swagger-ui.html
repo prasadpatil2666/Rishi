@@ -1,0 +1,693 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StayFocus API</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #667eea;
+            --primary-dark: #5568d3;
+            --secondary: #764ba2;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --error: #ef4444;
+            --accent: #c8973a;
+            --bg-primary: #0f172a;
+            --bg-secondary: #1e293b;
+            --bg-tertiary: #334155;
+            --text-primary: #f1f5f9;
+            --text-secondary: #cbd5e1;
+            --border: #475569;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
+            color: var(--text-primary);
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        /* Header */
+        header {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(102, 126, 234, 0.2);
+            border-radius: 16px;
+            padding: 3rem;
+            margin-bottom: 3rem;
+            animation: slideDown 0.6s ease-out;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.5rem;
+            font-weight: 700;
+        }
+
+        header p {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .links {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .links a {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            background: var(--primary);
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            border: 2px solid transparent;
+        }
+
+        .links a:hover {
+            background: transparent;
+            border-color: var(--primary);
+            color: var(--primary);
+            transform: translateY(-2px);
+        }
+
+        /* Main Content */
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        @media (max-width: 1024px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .card {
+            background: rgba(30, 41, 59, 0.6);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 2.5rem;
+            transition: all 0.3s ease;
+            animation: fadeIn 0.6s ease-out;
+            animation-fill-mode: both;
+        }
+
+        .card:nth-child(1) { animation-delay: 0.1s; }
+        .card:nth-child(2) { animation-delay: 0.2s; }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .card:hover {
+            border-color: var(--primary);
+            box-shadow: 0 0 30px rgba(102, 126, 234, 0.2);
+        }
+
+        .card h2 {
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            color: var(--text-primary);
+        }
+
+        .card h2 i {
+            color: var(--primary);
+            font-size: 1.75rem;
+        }
+
+        /* Endpoints */
+        .endpoint {
+            background: rgba(51, 65, 85, 0.5);
+            border: 1px solid rgba(102, 126, 234, 0.3);
+            padding: 1.25rem;
+            margin-bottom: 1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .endpoint::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(102, 126, 234, 0.2), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .endpoint:hover::before {
+            left: 100%;
+        }
+
+        .endpoint:hover {
+            background: rgba(102, 126, 234, 0.1);
+            border-color: var(--primary);
+            transform: translateX(8px);
+        }
+
+        .method {
+            display: inline-block;
+            padding: 0.4rem 1rem;
+            border-radius: 6px;
+            font-weight: 700;
+            font-size: 0.875rem;
+            margin-right: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .method.get {
+            background: rgba(16, 185, 129, 0.2);
+            color: var(--success);
+            border: 1px solid var(--success);
+        }
+
+        .method.post {
+            background: rgba(59, 130, 246, 0.2);
+            color: #3b82f6;
+            border: 1px solid #3b82f6;
+        }
+
+        .endpoint-path {
+            font-family: 'Courier New', monospace;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin: 0.75rem 0;
+            font-size: 1rem;
+            letter-spacing: 0.02em;
+        }
+
+        .endpoint-desc {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+
+        /* Form Styling */
+        .test-section {
+            margin-top: 1rem;
+        }
+
+        .test-section label {
+            display: block;
+            margin-bottom: 0.75rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            font-size: 0.95rem;
+        }
+
+        .test-section input,
+        .test-section textarea,
+        .test-section select {
+            width: 100%;
+            padding: 0.875rem;
+            background: rgba(51, 65, 85, 0.5);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: var(--text-primary);
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .test-section input:focus,
+        .test-section textarea:focus,
+        .test-section select:focus {
+            outline: none;
+            border-color: var(--primary);
+            background: rgba(102, 126, 234, 0.1);
+            box-shadow: 0 0 10px rgba(102, 126, 234, 0.3);
+        }
+
+        .test-section button {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+            border: none;
+            padding: 0.875rem 2rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            width: 100%;
+            font-size: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .test-section button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.2);
+            transition: left 0.5s ease;
+        }
+
+        .test-section button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .test-section button:hover::before {
+            left: 100%;
+        }
+
+        /* Response Box */
+        .response-container {
+            margin-top: 1.5rem;
+            display: none;
+        }
+
+        .response-container.active {
+            display: block;
+            animation: slideUp 0.3s ease-out;
+        }
+
+        .response-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(15, 23, 42, 0.9);
+            border: 2px solid var(--border);
+            border-bottom: none;
+            border-radius: 8px 8px 0 0;
+            padding: 1rem 1.5rem;
+            font-weight: 700;
+            font-size: 1rem;
+        }
+
+        .status-code {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .response-header.success {
+            border-color: var(--success);
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.15) 0%, rgba(16, 185, 129, 0.05) 100%);
+        }
+
+        .response-header.success .status-code {
+            color: var(--success);
+        }
+
+        .response-header.error {
+            border-color: var(--error);
+            background: linear-gradient(135deg, rgba(239, 68, 68, 0.15) 0%, rgba(239, 68, 68, 0.05) 100%);
+        }
+
+        .response-header.error .status-code {
+            color: var(--error);
+        }
+
+        .copy-btn {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .copy-btn:hover {
+            background: var(--primary-dark);
+            transform: scale(1.05);
+        }
+
+        .copy-btn.copied {
+            background: var(--success);
+        }
+
+        .response-box {
+            background: rgba(15, 23, 42, 0.95);
+            border: 2px solid var(--border);
+            border-top: none;
+            border-radius: 0 0 8px 8px;
+            padding: 1.5rem;
+            font-family: 'Courier New', monospace;
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            max-height: 450px;
+            overflow-y: auto;
+            line-height: 1.8;
+            word-break: break-word;
+            white-space: pre-wrap;
+        }
+
+        .response-box.success {
+            border-color: var(--success);
+            background: linear-gradient(135deg, rgba(15, 23, 42, 0.98) 0%, rgba(16, 185, 129, 0.05) 100%);
+        }
+
+        .response-box.error {
+            border-color: var(--error);
+            background: linear-gradient(135deg, rgba(15, 23, 42, 0.98) 0%, rgba(239, 68, 68, 0.05) 100%);
+        }
+
+        .response-box pre {
+            margin: 0;
+            font-family: 'Courier New', monospace;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Footer */
+        .footer {
+            background: rgba(30, 41, 59, 0.6);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 2.5rem;
+            text-align: center;
+            animation: fadeIn 0.6s ease-out 0.3s both;
+        }
+
+        .footer p {
+            margin-bottom: 1rem;
+            color: var(--text-secondary);
+        }
+
+        .footer code {
+            background: rgba(102, 126, 234, 0.1);
+            border: 1px solid rgba(102, 126, 234, 0.3);
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            font-family: 'Courier New', monospace;
+            color: var(--primary);
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.2), rgba(118, 75, 162, 0.2));
+            border: 1px solid var(--primary);
+            color: var(--primary);
+            border-radius: 20px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            margin-right: 0.75rem;
+            margin-bottom: 0.5rem;
+            display: inline-block;
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(30, 41, 59, 0.5);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--primary);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--secondary);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1><i class="fas fa-rocket"></i> StayFocus API</h1>
+            <p>Professional API Testing & Documentation Hub</p>
+            <div class="links">
+                <a href="/openapi/v1.json" target="_blank"><i class="fas fa-file-alt"></i> OpenAPI Spec</a>
+                <a href="https://github.com/prasadpatil2666/Rishi" target="_blank"><i class="fab fa-github"></i> GitHub</a>
+            </div>
+        </header>
+
+        <div class="main-content">
+            <div class="card">
+                <h2><i class="fas fa-list"></i> Available Endpoints</h2>
+                <div class="endpoint" onclick="selectEndpoint('get-reviews')">
+                    <span class="method get"><i class="fas fa-arrow-down"></i> GET</span>
+                    <div class="endpoint-path">/api/reviews</div>
+                    <div class="endpoint-desc">Retrieve all reviews</div>
+                </div>
+                <div class="endpoint" onclick="selectEndpoint('get-review')">
+                    <span class="method get"><i class="fas fa-arrow-down"></i> GET</span>
+                    <div class="endpoint-path">/api/reviews/{id}</div>
+                    <div class="endpoint-desc">Get specific review</div>
+                </div>
+                <div class="endpoint" onclick="selectEndpoint('post-review')">
+                    <span class="method post"><i class="fas fa-arrow-up"></i> POST</span>
+                    <div class="endpoint-path">/api/reviews</div>
+                    <div class="endpoint-desc">Create a new review</div>
+                </div>
+                <div class="endpoint" onclick="selectEndpoint('cosmos-reviews')">
+                    <span class="method get"><i class="fas fa-database"></i> GET</span>
+                    <div class="endpoint-path">/api/cosmos/reviews</div>
+                    <div class="endpoint-desc">Get all Cosmos DB reviews</div>
+                </div>
+                <div class="endpoint" onclick="selectEndpoint('cosmos-review')">
+                    <span class="method get"><i class="fas fa-database"></i> GET</span>
+                    <div class="endpoint-path">/api/cosmos/reviews/{id}</div>
+                    <div class="endpoint-desc">Get Cosmos DB review by ID</div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2><i class="fas fa-flask"></i> Test API</h2>
+                <div id="test-panel">
+                    <div class="test-section">
+                        <label><i class="fas fa-tasks"></i> Select Endpoint:</label>
+                        <select id="endpoint-select" onchange="handleEndpointSelect()">
+                            <option value="">-- Choose endpoint --</option>
+                            <option value="get-reviews">GET /api/reviews</option>
+                            <option value="get-review">GET /api/reviews/{id}</option>
+                            <option value="post-review">POST /api/reviews</option>
+                            <option value="cosmos-reviews">GET /api/cosmos/reviews</option>
+                            <option value="cosmos-review">GET /api/cosmos/reviews/{id}</option>
+                        </select>
+                    </div>
+                    <div id="get-reviews-params" style="display: none;">
+                        <button onclick="testEndpoint('get-reviews')"><i class="fas fa-paper-plane"></i> Send Request</button>
+                    </div>
+                    <div id="get-review-params" style="display: none;">
+                        <label><i class="fas fa-id-card"></i> Review ID:</label>
+                        <input type="number" id="review-id" placeholder="Enter ID" value="1">
+                        <button onclick="testEndpoint('get-review')"><i class="fas fa-paper-plane"></i> Send Request</button>
+                    </div>
+                    <div id="post-review-params" style="display: none;">
+                        <label><i class="fas fa-building"></i> Company:</label>
+                        <input type="text" id="company" placeholder="e.g., Tesla" value="Tesla">
+                        <label><i class="fas fa-star"></i> Rating:</label>
+                        <input type="number" id="rating" min="0" max="10" step="0.1" value="4.7">
+                        <label><i class="fas fa-heading"></i> Title:</label>
+                        <input type="text" id="title" placeholder="Title" value="Great">
+                        <label><i class="fas fa-comment"></i> Content:</label>
+                        <textarea id="content" rows="3">Excellent product</textarea>
+                        <button onclick="testEndpoint('post-review')"><i class="fas fa-paper-plane"></i> Send Request</button>
+                    </div>
+                    <div id="cosmos-reviews-params" style="display: none;">
+                        <button onclick="testEndpoint('cosmos-reviews')"><i class="fas fa-paper-plane"></i> Send Request</button>
+                    </div>
+                    <div id="cosmos-review-params" style="display: none;">
+                        <label><i class="fas fa-database"></i> Review ID:</label>
+                        <input type="text" id="cosmos-review-id" placeholder="e.g., rev_2026_x998877" value="rev_2026_x998877">
+                        <button onclick="testEndpoint('cosmos-review')"><i class="fas fa-paper-plane"></i> Send Request</button>
+                    </div>
+                    <div id="response-container" class="response-container">
+                        <div id="response-header" class="response-header">
+                            <div class="status-code" id="status-display"></div>
+                            <button class="copy-btn" onclick="copyResponse()" id="copy-btn"><i class="fas fa-copy"></i> Copy</button>
+                        </div>
+                        <div id="response" class="response-box"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p><strong>StayFocus API v2.0</strong> | Refactored with Clean Architecture</p>
+            <p>Base URL: <code>http://localhost:5000</code></p>
+            <div>
+                <span class="badge"><i class="fas fa-cube"></i> OpenAPI 3.0</span>
+                <span class="badge"><i class="fab fa-microsoft"></i> .NET 10</span>
+                <span class="badge"><i class="fas fa-shield-alt"></i> Clean Architecture</span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE = window.location.origin;
+        let lastResponse = null;
+
+        function selectEndpoint(e) {
+            document.getElementById('endpoint-select').value = e;
+            handleEndpointSelect();
+        }
+
+        function handleEndpointSelect() {
+            const v = document.getElementById('endpoint-select').value;
+            document.querySelectorAll('[id$="-params"]').forEach(el => el.style.display = 'none');
+            if (v === 'get-reviews') document.getElementById('get-reviews-params').style.display = 'block';
+            else if (v === 'get-review') document.getElementById('get-review-params').style.display = 'block';
+            else if (v === 'post-review') document.getElementById('post-review-params').style.display = 'block';
+            else if (v === 'cosmos-reviews') document.getElementById('cosmos-reviews-params').style.display = 'block';
+            else if (v === 'cosmos-review') document.getElementById('cosmos-review-params').style.display = 'block';
+        }
+
+        function copyResponse() {
+            if (!lastResponse) return;
+            navigator.clipboard.writeText(lastResponse).then(() => {
+                const btn = document.getElementById('copy-btn');
+                btn.classList.add('copied');
+                btn.innerHTML = '<i class="fas fa-check"></i> Copied!';
+                setTimeout(() => {
+                    btn.classList.remove('copied');
+                    btn.innerHTML = '<i class="fas fa-copy"></i> Copy';
+                }, 2000);
+            });
+        }
+
+        async function testEndpoint(type) {
+            const container = document.getElementById('response-container');
+            const header = document.getElementById('response-header');
+            const statusDisplay = document.getElementById('status-display');
+            const responseBox = document.getElementById('response');
+
+            container.classList.remove('active');
+            header.classList.remove('success', 'error');
+            responseBox.classList.remove('success', 'error');
+            statusDisplay.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
+            responseBox.innerHTML = '';
+            container.classList.add('active');
+
+            try {
+                let url, options;
+                switch (type) {
+                    case 'get-reviews':
+                        url = `${API_BASE}/api/reviews`;
+                        options = { method: 'GET' };
+                        break;
+                    case 'get-review':
+                        url = `${API_BASE}/api/reviews/${document.getElementById('review-id').value}`;
+                        options = { method: 'GET' };
+                        break;
+                    case 'post-review':
+                        url = `${API_BASE}/api/reviews`;
+                        options = {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({
+                                company: document.getElementById('company').value,
+                                rating: parseFloat(document.getElementById('rating').value),
+                                title: document.getElementById('title').value,
+                                content: document.getElementById('content').value
+                            })
+                        };
+                        break;
+                    case 'cosmos-reviews':
+                        url = `${API_BASE}/api/cosmos/reviews`;
+                        options = { method: 'GET' };
+                        break;
+                    case 'cosmos-review':
+                        url = `${API_BASE}/api/cosmos/reviews/${document.getElementById('cosmos-review-id').value}`;
+                        options = { method: 'GET' };
+                        break;
+                }
+
+                const response = await fetch(url, options);
+                const data = await response.json();
+                const statusClass = response.ok ? 'success' : 'error';
+                const icon = response.ok ? '<i class="fas fa-check-circle"></i>' : '<i class="fas fa-times-circle"></i>';
+                const statusText = response.ok ? '200 OK' : `${response.status} ${response.statusText}`;
+
+                lastResponse = JSON.stringify(data, null, 2);
+                statusDisplay.innerHTML = `${icon} ${statusText}`;
+                responseBox.innerHTML = `<pre>${lastResponse}</pre>`;
+                header.classList.add(statusClass);
+                responseBox.classList.add(statusClass);
+            } catch (error) {
+                lastResponse = error.message;
+                statusDisplay.innerHTML = '<i class="fas fa-exclamation-circle"></i> Error';
+                responseBox.innerHTML = `<pre>Error: ${error.message}</pre>`;
+                header.classList.add('error');
+                responseBox.classList.add('error');
+            }
+        }
+    </script>
+</body>
+</html>
