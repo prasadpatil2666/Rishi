@@ -41,21 +41,61 @@ public class ReviewService : IReviewService
     }
 
     /// <summary>
-    /// Initializes the database and container references
+    /// Initializes the database and container, creating them if they don't exist
     /// </summary>
     private async Task InitializeAsync()
     {
         if (_database == null)
         {
-            _database = _cosmosClient.GetDatabase(_databaseName);
+            try
+            {
+                // Create database if it doesn't exist
+                var databaseResponse = await _cosmosClient.CreateDatabaseIfNotExistsAsync(_databaseName);
+                _database = databaseResponse.Database;
+            }
+            catch (CosmosException ex)
+            {
+                throw new InvalidOperationException($"Failed to initialize database '{_databaseName}': {ex.Message}", ex);
+            }
         }
 
         if (_container == null)
         {
-            _container = _database.GetContainer(_containerName);
+            try
+            {
+                // First, try to get the container if it already exists
+                _container = _database.GetContainer(_containerName);
+                await _container.ReadContainerAsync();
+            }
+            catch (CosmosException ex) when (ex.StatusCode == System.Net.HttpStatusCode.NotFound)
+            {
+                // Container doesn't exist, try to create it
+                try
+                {
+                    var containerResponse = await _database.CreateContainerAsync(
+                        _containerName,
+                        partitionKeyPath: "/id",
+                        throughput: 400);
+                    _container = containerResponse.Container;
+                }
+                catch (CosmosException createEx) when (createEx.StatusCode == System.Net.HttpStatusCode.BadRequest 
+                    && createEx.Message.Contains("throughput", StringComparison.OrdinalIgnoreCase))
+                {
+                    throw new InvalidOperationException(
+                        $"Cannot create container '{_containerName}': Your Cosmos DB account has reached its throughput limit. " +
+                        $"Please either delete unused containers, increase your throughput limit, or manually create the container in Azure Portal.", 
+                        createEx);
+                }
+                catch (CosmosException createEx)
+                {
+                    throw new InvalidOperationException($"Failed to create container '{_containerName}': {createEx.Message}", createEx);
+                }
+            }
+            catch (CosmosException ex)
+            {
+                throw new InvalidOperationException($"Failed to initialize container '{_containerName}': {ex.Message}", ex);
+            }
         }
-
-        await Task.CompletedTask;
     }
 
     /// <summary>
@@ -83,6 +123,10 @@ public class ReviewService : IReviewService
             }
 
             return reviews;
+        }
+        catch (CosmosException ex) when (ex.StatusCode == System.Net.HttpStatusCode.NotFound)
+        {
+            throw new InvalidOperationException($"Reviews container not found in Cosmos DB. Please ensure the database '{_databaseName}' and container '{_containerName}' exist.", ex);
         }
         catch (Exception ex)
         {
