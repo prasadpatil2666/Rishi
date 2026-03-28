@@ -10,7 +10,11 @@ public class ReviewApiClient
     public ReviewApiClient(HttpClient httpClient, IConfiguration configuration)
     {
         _httpClient = httpClient;
-        _apiBaseUrl = configuration["ApiBaseUrl"] ?? "http://localhost:5000";
+        // Prefer explicit configuration, then HttpClient.BaseAddress (useful in Blazor WASM),
+        // otherwise fall back to empty string so relative URLs are used for same-origin hosting.
+        var configured = configuration["ApiBaseUrl"]?.TrimEnd('/');
+        var fromHttp = httpClient.BaseAddress?.ToString().TrimEnd('/');
+        _apiBaseUrl = configured ?? fromHttp ?? string.Empty;
     }
 
     public async Task<List<ReviewDto>?> GetReviewsAsync()
