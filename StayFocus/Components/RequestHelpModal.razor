@@ -1,0 +1,123 @@
+@using StayFocus.Models
+
+<div class="modal-overlay" @onclick="Close">
+    <div class="modal-content" @onclick:stopPropagation="true">
+        <div class="modal-header">
+            <h2>Request Mediation</h2>
+            <button class="close-btn" @onclick="Close">✕</button>
+        </div>
+
+        <div class="modal-body">
+            <p class="modal-intro">
+                Had a bad experience? Our mediation team will help you reach a fair resolution.
+            </p>
+
+            <form @onsubmit="SubmitRequest">
+                <div class="form-group">
+                    <label for="company-name">Company/Product Name *</label>
+                    <input 
+                        type="text" 
+                        id="company-name"
+                        class="form-control"
+                        placeholder="e.g., Apple iPhone 15 Pro Max"
+                        @bind="helpRequest.CompanyName"
+                        required
+                    />
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="requester-name">Your Name *</label>
+                        <input 
+                            type="text" 
+                            id="requester-name"
+                            class="form-control"
+                            placeholder="Full name"
+                            @bind="helpRequest.RequesterName"
+                            required
+                        />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="requester-email">Email Address *</label>
+                        <input 
+                            type="email" 
+                            id="requester-email"
+                            class="form-control"
+                            placeholder="your@email.com"
+                            @bind="helpRequest.RequesterEmail"
+                            required
+                        />
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="issue-description">What went wrong? *</label>
+                    <textarea 
+                        id="issue-description"
+                        class="form-control textarea"
+                        placeholder="Describe your experience and what happened..."
+                        @bind="helpRequest.IssueDescription"
+                        required
+                        rows="5"
+                    ></textarea>
+                    <small class="form-hint">Be specific about dates, what was promised, and what actually happened.</small>
+                </div>
+
+                <div class="modal-actions">
+                    <button type="button" class="btn-secondary" @onclick="Close">Cancel</button>
+                    <button type="submit" class="btn-primary">Submit Request</button>
+                </div>
+            </form>
+
+            @if (!string.IsNullOrEmpty(message))
+            {
+                <div class="message @messageType">
+                    @message
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public EventCallback OnClose { get; set; }
+
+    private HelpRequest helpRequest = new();
+    private string message = "";
+    private string messageType = "";
+
+    private async Task SubmitRequest()
+    {
+        // Validate form
+        if (string.IsNullOrEmpty(helpRequest.CompanyName) ||
+            string.IsNullOrEmpty(helpRequest.RequesterName) ||
+            string.IsNullOrEmpty(helpRequest.RequesterEmail) ||
+            string.IsNullOrEmpty(helpRequest.IssueDescription))
+        {
+            message = "Please fill in all required fields.";
+            messageType = "error";
+            return;
+        }
+
+        // Simulate API call
+        helpRequest.CreatedDate = DateTime.Now;
+        helpRequest.Status = "Pending";
+        helpRequest.Id = new Random().Next(1000, 9999);
+
+        message = $"✓ Your request has been submitted! Reference ID: #{helpRequest.Id}. Our team will contact you at {helpRequest.RequesterEmail} within 24 hours.";
+        messageType = "success";
+
+        // Clear form after 2 seconds and close
+        await Task.Delay(2000);
+        helpRequest = new();
+        await OnClose.InvokeAsync();
+    }
+
+    private void Close()
+    {
+        helpRequest = new();
+        message = "";
+    }
+}

@@ -1,14 +1,23 @@
 {
+  "auth": {
+    "sessionExpirationMinutes": 1440
+  },
+  "mimeTypes": {
+    ".dll": "application/octet-stream",
+    ".js": "application/javascript",
+    ".json": "application/json",
+    ".pdb": "application/octet-stream",
+    ".wasm": "application/wasm"
+  },
   "navigationFallback": {
     "rewrite": "/index.html",
     "exclude": [ "/_framework/*", "/css/*", "/js/*" ]
 
   },
-  "mimeTypes": {
-    ".wasm": "application/wasm",
-    ".dll": "application/octet-stream",
-    ".pdb": "application/octet-stream",
-    ".json": "application/json",
-    ".js": "application/javascript"
-  }
+  "routes": [
+    {
+      "route": "/.auth/login/github",
+      "allowedRoles": [ "anonymous" ]
+    }
+  ]
 }

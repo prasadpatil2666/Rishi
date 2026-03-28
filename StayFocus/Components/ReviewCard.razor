@@ -1,0 +1,65 @@
+@using StayFocus.Models
+
+<div class="review-card">
+    <div class="review-header">
+        <div class="reviewer-info">
+            <div class="avatar">@GetInitials(Review.Author)</div>
+            <div class="reviewer-details">
+                <div class="reviewer-name">@Review.Author</div>
+                <div class="reviewer-meta">
+                    @if (Review.IsVerified)
+                    {
+                        <span class="badge-verified">✓ Verified</span>
+                    }
+                    <span class="review-date">@Review.Date.ToString("MMM d, yyyy")</span>
+                </div>
+            </div>
+        </div>
+        <div class="rating-stars">
+            @for (int i = 0; i < 5; i++)
+            {
+                <span class="star @(i < (int)Review.Rating ? "filled" : "")">★</span>
+            }
+            <span class="rating-value">@Review.Rating.ToString("0.0")</span>
+        </div>
+    </div>
+
+    <div class="review-content">
+        <h3 class="review-title">@Review.Title</h3>
+        <p class="review-text">@Review.Content</p>
+        <div class="review-meta-info">
+            <span class="company-product">@Review.CompanyName · @Review.Location</span>
+            <span class="helpful-count">@Review.HelpfulCount helpful reviews</span>
+        </div>
+    </div>
+
+    <div class="review-actions">
+        <button class="action-btn" @onclick="MarkHelpful">
+            👍 Helpful (@Review.HelpfulCount)
+        </button>
+        <button class="action-btn">
+            💬 Reply
+        </button>
+        <button class="action-btn">
+            🚩 Report
+        </button>
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public Review Review { get; set; } = new();
+
+    private string GetInitials(string name)
+    {
+        var parts = name.Split(' ');
+        if (parts.Length >= 2)
+            return (parts[0][0].ToString() + parts[1][0].ToString()).ToUpper();
+        return name.Substring(0, Math.Min(2, name.Length)).ToUpper();
+    }
+
+    private void MarkHelpful()
+    {
+        Review.HelpfulCount++;
+    }
+}
