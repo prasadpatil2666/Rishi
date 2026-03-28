@@ -70,6 +70,15 @@ app.MapGet("/swagger", async (HttpContext context) =>
     await context.Response.WriteAsync(swaggerHtml);
 });
 
+// Also expose the same Swagger UI at /api/swagger for consumers that expect the UI under /api
+app.MapGet("/api/swagger", async (HttpContext context) =>
+{
+    var swaggerHtmlPath = Path.Combine(app.Environment.ContentRootPath, "Assets", "swagger-ui.html");
+    var swaggerHtml = await System.IO.File.ReadAllTextAsync(swaggerHtmlPath);
+    context.Response.ContentType = "text/html; charset=utf-8";
+    await context.Response.WriteAsync(swaggerHtml);
+});
+
 // ============================================================================
 // API ENDPOINTS
 // ============================================================================
