@@ -11,11 +11,10 @@ builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.
 
 // Register the Review API client
 builder.Services.AddScoped<ReviewApiClient>();
-builder.Services.AddSingleton<IConfiguration>(new ConfigurationBuilder()
-    .AddJsonStream(new MemoryStream(System.Text.Encoding.UTF8.GetBytes(@"
-    {
-      ""ApiBaseUrl"": ""http://localhost:5000""
-    }")))
-    .Build());
+// Do not register a hard-coded configuration here. Blazor WebAssembly's
+// CreateDefault already loads wwwroot/appsettings.json and environment
+// configuration for ApiBaseUrl. If you need to set a production API URL,
+// add wwwroot/appsettings.json with { "ApiBaseUrl": "https://api.example.com" }
+// or set the ApiBaseUrl environment variable at build/publish time.
 
 await builder.Build().RunAsync();

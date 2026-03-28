@@ -12,4 +12,9 @@
     <PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
   </ItemGroup>
 
+  <!-- Ensure custom Assets (swagger UI HTML) are included in build and publish output -->
+  <ItemGroup>
+    <None Include="Assets\**\*" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" />
+  </ItemGroup>
+
 </Project>
